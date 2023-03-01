@@ -11,6 +11,7 @@ class phpOpenAI {
   protected $Data = null;
   protected $Result = null;
   private $URL = 'https://api.openai.com/v1/';
+  protected $Counters = ["prompt_tokens" => 0,"completion_tokens" => 0,"total_tokens" => 0,"requests" => 0];
 
   public function __construct($token){
     if(is_string($token)){
@@ -46,6 +47,13 @@ class phpOpenAI {
     // Format Results
     $this->Result = json_decode($this->Result,true);
 
+    // Update Counters
+    $this->Counters['requests']++;
+    $this->Counters['prompt_tokens'] = $this->Counters['prompt_tokens'] + $this->Result['usage']['prompt_tokens'];
+    $this->Counters['completion_tokens'] = $this->Counters['completion_tokens'] + $this->Result['usage']['completion_tokens'];
+    $this->Counters['total_tokens'] = $this->Counters['total_tokens'] + $this->Result['usage']['total_tokens'];
+
+    // Return
     return $this->Result;
   }
 
@@ -59,5 +67,9 @@ class phpOpenAI {
 
   public function moderations($data = []){
     return $this->request($this->URL . 'moderations', $data);
+  }
+
+  public function usage(){
+    return $this->Counters;
   }
 }
