@@ -48,7 +48,7 @@ require 'vendor/autoload.php';
 $phpOpenAI = new phpOpenAI('YOUR_API_KEY');
 ```
 
-#### Request
+#### Completions
 ```php
 
 //Import phpOpenAI class into the global namespace
@@ -62,10 +62,56 @@ require 'vendor/autoload.php';
 $phpOpenAI = new phpOpenAI('YOUR_API_KEY');
 
 //Request
-$phpOpenAI->request([
+$phpOpenAI->completions([
   'model' => 'text-davinci-003',
   'prompt' => 'Say this is a test',
   'temperature' => 0,
   'max_tokens' => 7,
+  'top_p' => 1,
+  'n' => 1,
+  'stream' => false,
+  'logprobs' => null,
+  'stop' => '\n',
+]); // Returns an array
+```
+
+#### Edits
+```php
+
+//Import phpOpenAI class into the global namespace
+//These must be at the top of your script, not inside a function
+use LaswitchTech\phpOpenAI\phpOpenAI;
+
+//Load Composer's autoloader
+require 'vendor/autoload.php';
+
+//Initiate phpOpenAI
+$phpOpenAI = new phpOpenAI('YOUR_API_KEY');
+
+//Request
+$phpOpenAI->edits([
+  'model' => 'text-davinci-edit-001',
+  'input' => 'What day of the wek is it?',
+  'instruction' => 'Fix the spelling mistakes',
+]); // Returns an array
+```
+
+#### Moderations
+```php
+
+//Import phpOpenAI class into the global namespace
+//These must be at the top of your script, not inside a function
+use LaswitchTech\phpOpenAI\phpOpenAI;
+
+//Load Composer's autoloader
+require 'vendor/autoload.php';
+
+//Initiate phpOpenAI
+$phpOpenAI = new phpOpenAI('YOUR_API_KEY');
+
+//Request
+$phpOpenAI->moderations([
+  'model' => 'text-moderation-stable',
+  'input' => 'I want to kill them.',
 ]); // Returns an array
 ```

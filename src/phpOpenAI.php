@@ -10,7 +10,7 @@ class phpOpenAI {
   protected $Headers = null;
   protected $Data = null;
   protected $Result = null;
-  private $URL = 'https://api.openai.com/v1/completions';
+  private $URL = 'https://api.openai.com/v1/';
 
   public function __construct($token){
     if(is_string($token)){
@@ -22,14 +22,14 @@ class phpOpenAI {
     }
   }
 
-  public function request($data = []){
+  protected function request($url, $data){
 
     // Convert Data to String
     if(is_array($data)){ $data = json_encode($data); }
     $this->Data = $data;
 
     // Initiate cURL
-    $this->cURL = curl_init($this->URL);
+    $this->cURL = curl_init($url);
 
     // Configure cURL
     curl_setopt($this->cURL, CURLOPT_POST, 1);
@@ -47,5 +47,17 @@ class phpOpenAI {
     $this->Result = json_decode($this->Result,true);
 
     return $this->Result;
+  }
+
+  public function completions($data = []){
+    return $this->request($this->URL . 'completions', $data);
+  }
+
+  public function edits($data = []){
+    return $this->request($this->URL . 'edits', $data);
+  }
+
+  public function moderations($data = []){
+    return $this->request($this->URL . 'moderations', $data);
   }
 }
