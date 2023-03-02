@@ -13,8 +13,9 @@ class phpOpenAI {
   private $URL = 'https://api.openai.com/v1/';
   protected $Counters = ["prompt_tokens" => 0,"completion_tokens" => 0,"total_tokens" => 0,"requests" => 0];
 
-  public function __construct($token){
-    if(is_string($token)){
+  public function __construct($token = null){
+    if($token == null && defined("OPENAI_TOKEN")){ $token = OPENAI_TOKEN; }
+    if($token != null && is_string($token)){
       $this->Token = $token;
       $this->Headers = [
         'Content-Type: application/json',
@@ -24,6 +25,9 @@ class phpOpenAI {
   }
 
   protected function request($url, $data){
+
+    // Check if a token was configured
+    if($this->Token == null){ return "Authentication Token Required"; }
 
     // Convert Data to String
     if(is_array($data)){ $data = json_encode($data); }
